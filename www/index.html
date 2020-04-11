@@ -22,7 +22,10 @@
     
 
     <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: sans-serif; margin: 0; padding: 0; }
+
+    
+
+      body { background: url('./images/sf-cv19-stk8.jpg'); color: rgba(0,0,0,0.87); font-family: sans-serif; margin: 0; padding: 0; }
       #message { background: transparent; max-width: 400px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
       #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
       #message h1 { color: whitesmoke; margin: 0 0 16px;}
@@ -30,10 +33,45 @@
       #message a { display: block; text-align: center; background: #097f09b0; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
       #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
       #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      
       @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
+        body {
+        background: url('./images/sf-cv19-stk10.jpg');
+        background-position-x: right;
+        }
+
+        nav { 
+          display: flex !important;
+        }
+
+        #right-header { 
+          display: none;
+        }
+
+        #sf-safe-addr-btn { 
+          margin: 0 0 10px 0 !important ;
+        }
+
+        #map { 
+          height: 350px !important;
+          width: auto !important;
+        }
+
+        .sf-signup-details input {
+          width: auto !important;
+          height: 50px;
+        }
+
+        #sf-mw2 #loc-label { 
+          display: none;
+        }
+
+        #sf-lastlocations table { 
+          width: 340px !important;
+        }
+        
       }
+
       #map { 
         height: 400px;
         width: 500px;
@@ -54,11 +92,7 @@
         margin-top: -50px;
       }
 
-      body .container-fluid { 
-        background: url('./images/sf-cv19-stk8.jpg');
-        
-      }
-
+      
       #main, .sf-signup, .thankyou-msg { 
         height: 600px;
       }
@@ -79,7 +113,7 @@
       }
 
       #fsz-msg { 
-        height: 400px;
+        height: 420px;
         width: 350px;
         background: transparent;
         color: white;
@@ -89,7 +123,25 @@
         width: 200px;
         margin: -60px 0px 10px 300px;
        }
- 
+
+       #message #info_link { 
+         
+         font-size: 10px;
+       }
+       
+      #message h1, #message h2, #message h3, #message h4, #message h5, #message h6 { 
+        color: #ffffff;
+      }
+
+      #right-header a{ 
+        margin-right: 25px;
+        color: #097f09b0;
+        font-family: fantasy;
+      }
+
+      #map a { 
+        background: none;
+      }
       
     </style>
     
@@ -101,40 +153,62 @@
           <a href="/">
           <img src="./images/covidsafezone-logo.png"  /></a>
         </div>
-        <div class="col-sm">
-          
-        </div>
+        
         <div class="col-sm">
           <div id="right-header" style="margin-top: 30px; color:black; float: right;">
-            <a href="javascript:void(0)" class="button button-link" onclick="javascript:showSignUpForm();">Sign Up</a>
+            <a href="/">Home</a>
+            <a target="_blank" href="https://www.cdc.gov/coronavirus/2019-ncov/if-you-are-sick/steps-when-sick.html">Centers for Disease Control and Prevention</a>
+            <a href="javascript:void(0)" class="button button-link" onclick="javascript:showSignUpForm();">Help Others</a>
+            <a href="javascript:void(0)" class="button button-link" onclick="javascript:showCVSafeZones();">Find Safe Zone</a>
+            
           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm ">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light" style="display:none;">
+            <a class="navbar-brand" href="#"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="/">Home </a>
+                <a class="nav-item nav-link" target="_blank" href="https://www.cdc.gov/coronavirus/2019-ncov/if-you-are-sick/steps-when-sick.html">Centers for Disease Control and Prevention</a>
+                <a class="nav-item nav-link" href="javascript:void(0)" class="button button-link" onclick="javascript:showSignUpForm();">Help Others</a>
+                <a class="nav-item nav-link" href="javascript:void(0)" class="button button-link" onclick="javascript:showCVSafeZones();">Find Safe Zone</a>
+              </div>
+            </div>
+          </nav>
         </div>
       </div>
       
       <div class="row" id="main">
-        <div class="col-sm"></div>
+        
         <div class="col-sm">
           <div id="message">
             
             <h1>What is SafeZone?</h1>
-            <p>Be warned about the places you will be visting upfront if the location is visited by a person tested Positive with Covid-19</p>
-            <a href="javascript:void(0)" onclick="javascript:showSignUpForm();">Sign Up</a>
+            <p>Be warned about the places you will be visting upfront if the location is visited by a person tested Positive with Covid-19 or symptoms</p>
+            <p>Do you have Covid Symptoms or have you tested positive?</p>
+            <a href="javascript:void(0)" onclick="javascript:showSignUpForm();">Help Others</a>
             <br/>
             <a href="javascript:void(0)" onclick="javascript:showCVSafeZones();">Find Safe Zone</a>
           </div>
-
-         
         </div>
-        
-      </div>
-      <div class="row sf-map" id="sf-map" style="display: none;">
         <div class="col-sm">
-          <div id="message">
-            <ul id="fsz-msg">
-              
-            </ul>
+          <div id="message" style="background: #097f09b0">
+            <h3>* Is this an emergency?</h3>
+            <p>Stop and call 911.</p>
+            
+            <p>If you think you have been exposed to COVID‑19 and develop a fever and symptoms, such as cough or difficulty breathing, call your healthcare provider for medical advice.
+            </p>
+            <p style="font-size:14px;">Source: <a id="info_link" target="_blank" href="https://www.cdc.gov/coronavirus/2019-ncov/if-you-are-sick/steps-when-sick.html">Centers for Disease Control and Prevention</a></p>
           </div>
         </div>
+      </div>
+      <div class="row sf-map" id="sf-map" style="display: none;">
+        
         <div class="col-sm">
           
           <div class="row">
@@ -144,10 +218,17 @@
                 <a href="javascript:void(0)" onclick="javascript:isSafeAddress();" id="sf-safe-addr-btn">Is Safe Address</a>
               <div id="map"></div>
               <br/>
-              <a href="javascript:void(0)" onclick="javascript:showSignUpForm();">Sign Up</a>
+              <a href="javascript:void(0)" onclick="javascript:showSignUpForm();">Help Others</a>
                 
             </div>
             </div>
+          </div>
+        </div>
+        <div class="col-sm" >
+          <div id="message">
+            <ul id="fsz-msg">
+              
+            </ul>
           </div>
         </div>
         
@@ -332,6 +413,7 @@
                     return;
                   }
                 }
+                window.scrollBy(0, 700);
         }
       }
 
@@ -360,6 +442,7 @@
       }
 
       function showSignUpForm() { 
+        window.scrollBy(0, 0);
         $("#main").hide();
         $("#sf-signup").show();
         $("#sf-mw1").show();

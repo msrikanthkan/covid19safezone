@@ -1,5 +1,10 @@
-<div class="col-sm"></div>
-<div class="col-sm"></div>
+<div class="col-sm">
+    <div id="message" style="color: white">
+        <h2>Test your COVID-19 symptoms here</h2>
+        <a target="_blank" href="https://www.apple.com/covid19/">COVID 19 Symptoms</a>
+    </div>
+</div>
+
 <div class="col-sm sf-signup-middlewrapper" id="sf-signup-middlewrapper">
     <div id="sf-mw1">
     <h4><label>Signup with your personal details </label></h4>
@@ -36,7 +41,7 @@
         <h4><label>Enter the last 5 locations visited in the last 7-14 days </label></h4>
         <div class="sf-signup-details">
             <table><tr>
-            <td><label>Locations: </label><input type="text" class="controls" required id="sf-locations" name="sf-locations" placeholder="Enter last visited location" onkeyup="javascript:autoCompleteAddress(this);" autocomplete="on"/></td>
+            <td><label id="loc-label">Locations: </label><input type="text" class="controls" required id="sf-locations" name="sf-locations" placeholder="Enter last visited location" onkeyup="javascript:autoCompleteAddress(this);" autocomplete="on"/></td>
             <td><a href="#" onclick="javascript:addLocation();" style="margin-bottom: 20px;">Add Location</a>  </td>
             </tr></table>
             <div id="sf-lastlocations">
