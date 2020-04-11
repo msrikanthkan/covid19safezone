@@ -1,0 +1,60 @@
+<div class="col-sm"></div>
+<div class="col-sm"></div>
+<div class="col-sm sf-signup-middlewrapper" id="sf-signup-middlewrapper">
+    <div id="sf-mw1">
+    <h4><label>Signup with your personal details </label></h4>
+    <div class="sf-signup-details" id="sf-signup-details">
+        <label>Email: </label><input type="text" id="sf-email" name="sf-email" required/> <label id="sf-email-err">Email is required</label>
+        <br>
+        <label>Home Address: </label><input type="text" class="controls" required id="sf-address" name="sf-address" placeholder="Enter home address" onkeyup="javascript:autoCompleteAddress(this);" autocomplete="on"/> <label id="sf-address-err">Address is required</label>
+        
+    </div>
+    <h4><label>Do you have covid-19 symptoms </label></h4>
+    <div class="sf-cv19-details">
+        <div id="sf-symptoms" >
+        <input type="radio" id="sf-cv19-symptoms-yes" name="sf-cv19-symptoms" value="yes" required/><label>Yes</label>
+        <input type="radio" id="sf-cv19-symptoms-no" name="sf-cv19-symptoms" value="no" required/><label>No</label>
+        <label id="sf-cv19-symptoms-yes-err">Symptoms is required</label>
+        <br>
+    </div>
+        <div id="sf-tested" style="display:none">
+            <h4><label>Are you tested positive with Covid-19 </label></h4>
+            <input type="radio" id="sf-cv19-tested-yes" name="sf-cv19-tested" value="yes" required/><label>Yes</label>
+            <input type="radio" id="sf-cv19-tested-no" name="sf-cv19-tested" value="no" required/><label>No</label>
+            <br>
+            <label id="sf-cv19-tested-yes-err">Tested is required</label>
+        </div>
+    </div>
+    
+    
+    <a href="javascript:void(0)" onclick="javascript:hideMW1();" style="display:none;" >Continue</a>  
+    <div id="sf-msg-section" style="display: none; background: #ffffff"><p>
+        <h5><b>Great!!</b>, please follow your local news and stay safe at home </h5>
+    </p></div>
+    </div>  
+    <div id="sf-mw2">
+        <h4><label>Enter the last 5 locations visited in the last 7-14 days </label></h4>
+        <div class="sf-signup-details">
+            <table><tr>
+            <td><label>Locations: </label><input type="text" class="controls" required id="sf-locations" name="sf-locations" placeholder="Enter last visited location" onkeyup="javascript:autoCompleteAddress(this);" autocomplete="on"/></td>
+            <td><a href="#" onclick="javascript:addLocation();" style="margin-bottom: 20px;">Add Location</a>  </td>
+            </tr></table>
+            <div id="sf-lastlocations">
+                <ul>
+                    <table>
+
+                    </table>
+                </ul>
+            </div>
+            <table id="sf-signup-form-submit">
+                <tr>
+                    <td><a href="javascript:void(0)" id="sf-signup-cancel" >Cancel</a></td>
+                    <td><a href="javascript:void(0)" id="sf-signup-submit">Submit</a></td>
+                </tr>
+            </table>
+            
+        </div>
+    </div>
+</div>
+
+

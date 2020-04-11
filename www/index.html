@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Covid SafeZone</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/signup.css" />
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/7.13.2/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/7.13.2/firebase-auth.js"></script>
+    <script defer src="/__/firebase/7.13.2/firebase-database.js"></script>
+    <script defer src="/__/firebase/7.13.2/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/7.13.2/firebase-storage.js"></script>
+    <script defer src="/__/firebase/7.13.1/firebase-firestore.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+
+    <script type="text/javascript" src="./scripts/SafeZone.js"></script>
+    
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: sans-serif; margin: 0; padding: 0; }
+      #message { background: transparent; max-width: 400px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { color: whitesmoke; margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 21px; color: #ffffff}
+      #message a { display: block; text-align: center; background: #097f09b0; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+      #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+      #map { 
+        height: 400px;
+        width: 500px;
+      }
+      #main { 
+        
+        background-position: center;
+      }
+
+      #infowindow-content {
+        display: none;
+      }
+      #map #infowindow-content {
+        display: inline;
+      }
+
+      #logo img { 
+        margin-top: -50px;
+      }
+
+      body .container-fluid { 
+        background: url('./images/sf-cv19-stk8.jpg');
+        
+      }
+
+      #main, .sf-signup, .thankyou-msg { 
+        height: 600px;
+      }
+
+      #sf-email-err, #sf-address-err, #sf-cv19-symptoms-err, #sf-cv19-tested-err { 
+        color: red;
+      }
+
+      #map #sf-address { 
+        width: 275px;
+        height: 40px;
+        border-radius: 1em;
+      }
+
+      #fsz-msg li { 
+        list-style-type: none;
+        
+      }
+
+      #fsz-msg { 
+        height: 400px;
+        width: 350px;
+        background: transparent;
+        color: white;
+        padding-top: 20px;
+      }
+      #sf-safe-addr-btn {
+        width: 200px;
+        margin: -60px 0px 10px 300px;
+       }
+ 
+      
+    </style>
+    
+  </head>
+  <body>
+    <div class="container-fluid" >
+      <div class="row" style="height: 100px; background: #ffffff;" id="header">
+        <div class="col-sm" id="logo">
+          <a href="/">
+          <img src="./images/covidsafezone-logo.png"  /></a>
+        </div>
+        <div class="col-sm">
+          
+        </div>
+        <div class="col-sm">
+          <div id="right-header" style="margin-top: 30px; color:black; float: right;">
+            <a href="javascript:void(0)" class="button button-link" onclick="javascript:showSignUpForm();">Sign Up</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row" id="main">
+        <div class="col-sm"></div>
+        <div class="col-sm">
+          <div id="message">
+            
+            <h1>What is SafeZone?</h1>
+            <p>Be warned about the places you will be visting upfront if the location is visited by a person tested Positive with Covid-19</p>
+            <a href="javascript:void(0)" onclick="javascript:showSignUpForm();">Sign Up</a>
+            <br/>
+            <a href="javascript:void(0)" onclick="javascript:showCVSafeZones();">Find Safe Zone</a>
+          </div>
+
+         
+        </div>
+        
+      </div>
+      <div class="row sf-map" id="sf-map" style="display: none;">
+        <div class="col-sm">
+          <div id="message">
+            <ul id="fsz-msg">
+              
+            </ul>
+          </div>
+        </div>
+        <div class="col-sm">
+          
+          <div class="row">
+            <div class="col-sm">
+              <div id="message">
+                <input type="text" class="controls" style="width: 275px; height:40px; margin-bottom: 13px; border-radius:2em; border: 1px solid #737575" id="sf-places" name="sf-places" placeholder="Where to?" size="20" >
+                <a href="javascript:void(0)" onclick="javascript:isSafeAddress();" id="sf-safe-addr-btn">Is Safe Address</a>
+              <div id="map"></div>
+              <br/>
+              <a href="javascript:void(0)" onclick="javascript:showSignUpForm();">Sign Up</a>
+                
+            </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      <div class="row sf-signup" id="sf-signup" style="display: none;">
+        
+      </div>
+      <div class=" row thankyou-msg" id="thankyou-msg" style="display:none;">
+        <div class="col-sm"></div>
+        <div class="col-sm"></div>
+        <div class="col-sm">
+          <div id="message">
+            <h1>Thank you for submitting your details</h1>
+            <p>Your details help the nation fight <b>COVID-19</b></p>
+            <br/>
+            <a href="javascript:void(0)" onclick="javascript:showCVSafeZones();">Find Safe Zone</a>
+          </div>
+        </div>
+        
+      </div>
+      <div class="row" id="footer">
+        <div class="col"></div>
+      </div>
+    </div>
+    
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.1.0.js" integrity="sha256-oA/lsZCgEPkbv/byAkeXSTEZTsGOPZCrtbyFBHmcGKM=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+
+        var currentElement;
+        var lastVisitedLocations = [];
+        var userSearchAddress = {};
+      document.addEventListener('DOMContentLoaded', function() {
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+          let app = firebase.app();
+          let features = ['auth', 'database', 'messaging', 'storage', 'firestore'].filter(feature => typeof app[feature] === 'function');
+         console.log("Firebase SDK loaded with" +  features.join(', '));
+         console.log("firestore object"+ firebase.firestore().collection("sf_locations").get().then(function(results) { 
+          results.forEach(function(index, value){ 
+            console.log(value);
+          })
+         })
+         )
+         console.log(firebase.firestore().collection("sf_locations").doc("h9VpZqE7COYc17SadzLp").get().then(function(result){
+           console.log(result);
+         }));
+        } catch (e) {
+          console.error(e);
+          // document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+        }
+
+          $.get("/signup.html").then(function(response) { 
+            $("#sf-signup").html(response);
+            $("input[name='sf-cv19-symptoms']").on('click', function(e) { 
+              if (e.target && e.target.value)
+              if (e.target.value.toLowerCase() === "yes") { 
+                $("#sf-tested").show();
+                $("input[name='sf-cv19-tested']").prop("checked", false);
+                $("#sf-msg-section").hide();
+              } else { 
+                $("#sf-tested").hide();
+                $("#sf-msg-section").show();
+                $(".sf-signup-middlewrapper a").hide();
+              }
+            });
+
+            $("input[name='sf-cv19-tested']").on('click', function(e) { 
+              if (e.target && e.target.value) { 
+                $(".sf-signup-middlewrapper a").show();
+              }
+              
+            });
+            $("input").each(function(index, value) { 
+              var errorLabelId = value.id + "-err";
+              $("#"+errorLabelId).hide();
+            });
+
+            $("input").on('focusout', function(e) { 
+              var errorLabelId = e.target.id+ "-err";
+              if (e.target && !e.target.value) { 
+                
+                $("#"+errorLabelId).show();
+                $("#"+errorLabelId).css("color", "red");
+              } else { 
+                $("#"+errorLabelId).hide();
+              }
+            });
+
+            $("#sf-signup-submit").on('click', function(e) { 
+                if (!$("#sf-email").val()) { 
+                  return;
+                }
+                if (!$("#sf-address").val()) { 
+                  return;
+                }
+                if (!$("input[name='sf-cv19-tested']").prop("checked")) { 
+                  return;
+                }
+
+
+                var userInfo = {};
+                userInfo.email = $("#sf-email").val();
+                userInfo.home_address = $("#sf-address").val();
+                userInfo.covid_symptoms = $("input[name='sf-cv19-symptoms']").prop("checked");
+                userInfo.covid_tested = $("input[name='sf-cv19-tested']").prop("checked");
+                // userInfo.current_location = getUserCurrentLocation();
+
+
+                window.localStorage.setItem("uvl", JSON.stringify(lastVisitedLocations));
+                new SafeZone().addUserVisitedLocations(userInfo);
+                $("#thankyou-msg").show();
+                $("#main").hide();
+                $("#sf-signup").hide();
+            });
+
+            $("#sf-signup-cancel").on('click', function(e) { 
+              showSignUpForm();
+
+            });
+
+            
+
+          });
+
+      
+
+      });
+
+      
+      function isSafeAddress() { 
+        if (!$("#sf-places").val()) { 
+          return;
+        }
+        else { 
+          var warnMsg = "<li> Address: "+ $("#sf-places").val() + "</li> <br/>" + 
+                    "<li style='font-size: 22px; font-family: fantasy'> This address has been visited by people having covid-19 symptoms or covid-19 tested. </li> <br/>"
+                    + "<li> * This information is provided by the users who are trying to help fight covid-19.  There is no source of validation for the given address. </li> <br/>"
+                    + "<li> ** You may still visit the location, but it's better to stay home till this pandemic comes to end.</li>";
+          var infoMsg = "<li> Address: "+ $("#sf-places").val() + "</li> <br/>" + 
+                    "<li> This address has not been reported by anyone. If you think this address is visited by someone who is a covid 19 victim please signup and update. </li> <br/>"
+                    + "<li> * Kindly be as accurate as possible before you update, as many of us rely on this information. </li> <br/>"
+                    + "<li> **You may still visit the location, but it's better to stay home till this pandemic comes to end.</li>";
+                      var pid = userSearchAddress.placeId;
+                if (!window.localStorage.getItem(pid)) {
+                  var isSafeZone = new SafeZone().getSafeZoneLocationById(pid).then(function(result){
+                    if (result.exists) { 
+                      var sfAddress = result.data();
+                      window.localStorage.setItem(pid, JSON.stringify(sfAddress));
+                      if (sfAddress.address === $("#sf-places").val()) { 
+                    
+                        $("#fsz-msg").html(warnMsg);
+                        $("#fsz-msg").css("background", "#097f09b0");
+                        return;
+                      }
+                    } else { 
+                      $("#fsz-msg").html(infoMsg);
+                        $("#fsz-msg").css("background", "#097f09b0");
+                    }
+                  });
+                } else { 
+                  var sfAddress = JSON.parse(window.localStorage.getItem(pid));
+                  if (sfAddress.address === $("#sf-places").val()) { 
+                    
+                    $("#fsz-msg").html(warnMsg);
+                    $("#fsz-msg").css("background", "#097f09b0");
+                    return;
+                  }
+                }
+        }
+      }
+
+      function getUserCurrentLocation() { 
+        if (navigator.geolocation) {
+         return  navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+         //  x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+      }
+
+      function showPosition(position) {
+        var cord = {};
+        cord.lat =  position.coords.latitude;
+          cord.lng = position.coords.longitude;
+        return cord;
+      }
+
+      function showCVSafeZones() { 
+        $("#main").hide();
+        $("#sf-map").show();
+        $("#thankyou-msg").hide();
+        $("#sf-signup").hide();
+        $("#sf-mw2").hide();
+        initAutocomplete();
+      }
+
+      function showSignUpForm() { 
+        $("#main").hide();
+        $("#sf-signup").show();
+        $("#sf-mw1").show();
+        $("#sf-mw2").hide();
+        $("#sf-map").hide();
+        $("#thankyou-msg").hide();
+        }
+
+        function hideMW1() { 
+          if (!$("#sf-email").val()) { 
+            $("#sf-email-err").show();
+                  return;
+                }
+                if (!$("#sf-address").val()) { 
+                  $("#sf-address-err").show();
+                  return;
+                }
+                if (!$("input[name='sf-cv19-symptoms']").prop("checked")) { 
+                  $("#sf-cv19-symptoms-yes-err").show();
+                  return;
+                }
+          $("#sf-mw1").hide();
+          $("#sf-mw2").show();
+          $("#sf-signup-form-submit").hide();
+        }
+
+        
+      // This example adds a search box to a map, using the Google Place Autocomplete
+      // feature. People can enter geographical searches. The search box will return a
+      // pick list containing a mix of places and predicted search terms.
+
+      // This example requires the Places library. Include the libraries=places
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+        
+      $("input").on('click', function(e) { 
+        console.log(e.target.id);
+        currentElement = e.target.id;
+      });
+
+
+      function initAutocomplete() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -33.8688, lng: 151.2195},
+          zoom: 13,
+          mapTypeId: 'roadmap'
+        });
+
+        // Create the search box and link it to the UI element.
+        if (!currentElement) { 
+          currentElement = "sf-places";
+        }
+        var input = document.getElementById(currentElement);
+        var searchBox = new google.maps.places.SearchBox(input);
+        // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+
+             
+            userSearchAddress.address = place.formatted_address;
+            userSearchAddress.placeId = place.place_id;
+            userSearchAddress.latitude = place.geometry.location.lat();
+            userSearchAddress.longitude = place.geometry.location.lng();
+            
+
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+            $("#sf-places").val(place.formatted_address);
+          });
+          map.fitBounds(bounds);
+        });
+      }
+
+      function autoCompleteAddress(control) {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -33.8688, lng: 151.2195},
+          zoom: 13,
+          mapTypeId: 'roadmap'
+        });
+
+        // Create the search box and link it to the UI element.
+        var input = document.getElementById('sf-address');
+        var searchBox = new google.maps.places.SearchBox(control);
+        // map.controls[google.maps.ControlPosition.TOP_LEFT].push(control);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        var markers = [];
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function() {
+          var places = searchBox.getPlaces();
+
+          if (places.length == 0) {
+            return;
+          }
+
+          // Clear out the old markers.
+          markers.forEach(function(marker) {
+            marker.setMap(null);
+          });
+          markers = [];
+
+          // For each place, get the icon, name and location.
+          var bounds = new google.maps.LatLngBounds();
+          places.forEach(function(place) {
+            
+            if (!place.geometry) {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            var icon = {
+              url: place.icon,
+              size: new google.maps.Size(71, 71),
+              origin: new google.maps.Point(0, 0),
+              anchor: new google.maps.Point(17, 34),
+              scaledSize: new google.maps.Size(25, 25)
+            };
+
+            // Create a marker for each place.
+            markers.push(new google.maps.Marker({
+              map: map,
+              icon: icon,
+              title: place.name,
+              position: place.geometry.location
+            }));
+            var lastVisitedLocation = {}; 
+            lastVisitedLocation.address = place.formatted_address;
+            lastVisitedLocation.placeId = place.place_id;
+            lastVisitedLocation.latitude = place.geometry.location.lat();
+            lastVisitedLocation.longitude = place.geometry.location.lng();
+            lastVisitedLocation.created_timestamp = new Date().getTime();
+            lastVisitedLocation.created_date = new Date();
+            lastVisitedLocations.push(lastVisitedLocation);
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
+            $("#sf-locations").val(place.formatted_address);
+          });
+          map.fitBounds(bounds);
+          
+        });
+      }
+
+      function addLocation() { 
+          var lastLocation = $("#sf-locations").val();
+          $.each(lastVisitedLocations, function(index, value) {
+            if (lastLocation) {
+              if (value.address === lastLocation) { 
+                
+                var location = "<tr id='"+value.placeId + "'><td><li>" + lastLocation + "</li></td><td> <a href='#' onclick=javascript:removeLocation('"+ value.placeId+ "');>Remove Location </a></td></tr>"
+                var lastLocations = $("#sf-lastlocations ul table").html();
+                if (!lastLocations)
+                lastLocations = "";
+                $("#sf-lastlocations ul table").html(location + lastLocations);
+                $("#sf-locations").val("");
+                
+              }
+            }
+          });
+          if (lastLocation) { 
+            $("#sf-signup-form-submit").show();
+            if ($("#sf-lastlocations ul table tr").length === 5) { 
+              $("#sf-locations").attr("readonly", true);
+              $("#sf-locations").attr("disabled", "disabled");
+              return;
+          }
+          }
+          
+        }
+
+        function removeLocation(placeId) { 
+          $("#"+placeId).remove();
+          lastVisitedLocations = lastVisitedLocations.filter(function(value, index) { 
+            return value.placeId !== placeId;
+          });
+          if ($("#sf-lastlocations ul table tr").length === 0) { 
+            $("#sf-signup-form-submit").hide();
+          } else if ($("#sf-lastlocations ul table tr").length < 5) { 
+            $("#sf-signup-form-submit").show();
+            $("#sf-locations").removeAttr("readonly");
+            $("#sf-locations").removeAttr("disabled");
+          }
+           console.log(lastVisitedLocations);
+        }
+
+        
+    </script>
+    
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVV2Iixp5B0f87Ism-DCd5QkW-guOumD4&libraries=places&callback=initAutocomplete" async defer></script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+.sf-signup { 
+    margin-top: 20px;
+    
+    
+}
+
+.sf-signup-details, .sf-last-visited-loc { 
+    margin: 20px 0;
+    width: 600px;
+}
+
+.sf-signup-middlewrapper h4{ 
+    margin-top: 20px;
+    color: #ffffff;
+}
+
+.sf-signup-details input { 
+    
+    margin-left: 20px;
+    margin-bottom: 20px;
+    border-radius: 2em;
+    border: 1px solid #bfe1ed;
+    width: 275px;
+    height: 40px;
+}
+
+
+
+.sf-signup-details label { 
+    width: 120px;
+}
+
+.sf-cv19-details input { 
+    margin: 0 10px;
+}
+
+.sf-signup-middlewrapper a, .sf-signup-middlewrapper button { 
+    display: block; 
+    text-align: center; 
+    background: #097f09b0;; 
+    text-transform: uppercase; 
+    text-decoration: none; 
+    color: white; 
+    padding: 16px; 
+    border-radius: 4px; 
+}
+
+#sf-lastlocations ul{ 
+    list-style: circle;
+    background: #ffffff;
+}
+
+.sf-signup-middlewrapper ul a { 
+    background: none;
+    color: red;
+}
+
+.sf-signup-middlewrapper label { 
+    color: #ffffff;
+}
